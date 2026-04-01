@@ -1,0 +1,74 @@
+{
+  "name": "devflow-engine",
+  "version": "0.1.0",
+  "description": "自动化开发工作流引擎",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "devflow": "./dist/cli/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:web": "vite build --outDir dist/web-static",
+    "build:all": "npm run build && npm run build:web",
+    "dev": "tsc --watch",
+    "dev:server": "node dist/cli/index.js start",
+    "dev:web": "vite",
+    "dev:full": "npm run build && (node dist/server/index.js & vite)",
+    "start": "node dist/cli/index.js init . && node dist/server/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "clean": "rm -rf dist",
+    "prepare": "npm run build:all"
+  },
+  "keywords": [
+    "workflow",
+    "automation",
+    "agent",
+    "devflow"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@fastify/cors": "^9.0.0",
+    "@fastify/websocket": "^9.0.0",
+    "chalk": "^5.3.0",
+    "chokidar": "^3.5.3",
+    "commander": "^11.1.0",
+    "fastify": "^4.26.0",
+    "ora": "^7.0.1",
+    "yaml": "^2.3.4",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.2",
+    "@types/node": "^20.11.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@types/ws": "^8.18.1",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/coverage-v8": "^1.2.0",
+    "autoprefixer": "^10.4.27",
+    "eslint": "^8.56.0",
+    "postcss": "^8.5.8",
+    "prettier": "^3.2.4",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "reactflow": "^11.11.4",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^5.3.3",
+    "vite": "^8.0.3",
+    "vitest": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ]
+}
