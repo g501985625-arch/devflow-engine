@@ -6,7 +6,7 @@ let mainWindow;
 let serverStarted = false;
 
 // 使用 /tmp 作为日志位置，确保能写入
-const logPath = '/tmp/devflow-electron.log';
+let logPath = '/tmp/devflow-electron.log';
 
 function log(message) {
   const timestamp = new Date().toISOString();
@@ -21,6 +21,8 @@ function log(message) {
 
 // 立即写入日志，测试脚本是否执行
 log('=== ELECTRON MAIN.JS LOADED ===');
+log(`process.arch: ${process.arch}`);
+log(`process.platform: ${process.platform}`);
 
 async function createWindow() {
   mainWindow = new BrowserWindow({
@@ -89,17 +91,21 @@ async function startServer() {
   }
 }
 
+log('Registering app.whenReady handler...');
+
 app.whenReady().then(async () => {
-  // 在 app ready 后初始化日志路径
-  logPath = path.join(app.getPath('userData'), 'devflow.log');
-  log('App ready');
+  log('=== APP READY ===');
   log(`__dirname: ${__dirname}`);
   log(`app.getAppPath(): ${app.getAppPath()}`);
   log(`process.resourcesPath: ${process.resourcesPath}`);
   
   await startServer();
   await createWindow();
+}).catch(err => {
+  log(`app.whenReady error: ${err.message}`);
 });
+
+log('app.whenReady handler registered');
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
