@@ -27,7 +27,7 @@ export async function registerControlRoutes(
    */
   fastify.post(
     '/api/control/start',
-    async (request: FastifyRequest<{ Body: { projectId: string } }>, _reply: FastifyReply): Promise<ApiResponse<{ started: boolean; projectId: string; timestamp: string } | ApiResponse>> => {
+    async (request: FastifyRequest<{ Body: { projectId: string } }>, _reply: FastifyReply) => {
       if (!engine.isInitialized()) {
         return errorResponse('Engine not initialized', 'ENGINE_NOT_INITIALIZED');
       }

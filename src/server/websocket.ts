@@ -45,7 +45,7 @@ export function setupWebSocket(fastify: FastifyInstance, engine: DevFlowEngine):
       // 监听消息
       socket.on('message', (rawMessage: Buffer) => {
         try {
-          const message: WsMessage = JSON.parse(rawMessage.toString());
+          const message = JSON.parse(rawMessage.toString()) as WsMessage;
 
           handleClientMessage(socket, message, engine);
         } catch (error) {
@@ -112,14 +112,16 @@ function handleClientMessage(
       }
       break;
 
-    default:
+    default: {
+      const unknownType = (message as { type: string }).type;
       sendToClient(socket, {
         type: 'error',
         timestamp: new Date().toISOString(),
         data: {
-          message: `Unknown message type: ${message.type}`,
+          message: `Unknown message type: ${unknownType}`,
         },
       });
+    }
   }
 }
 

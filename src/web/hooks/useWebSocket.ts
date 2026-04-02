@@ -71,10 +71,13 @@ export function useWebSocket({
         console.log('[WebSocket] Connected to', url);
       };
 
-      ws.onmessage = (event) => {
+      ws.onmessage = (event: MessageEvent) => {
         if (!mountedRef.current) return;
         try {
-          const data = JSON.parse(event.data) as AutomationEvent;
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          const jsonString = event.data as string;
+          const rawData: unknown = JSON.parse(jsonString);
+          const data = rawData as AutomationEvent;
           setLastMessage(data);
           onMessage?.(data);
         } catch (e) {
