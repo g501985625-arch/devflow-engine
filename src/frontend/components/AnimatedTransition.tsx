@@ -22,6 +22,12 @@ const AnimatedTransition: React.FC<AnimatedTransitionProps> = ({
   const [isVisible, setIsVisible] = useState(trigger === 'always');
   const [hasAnimated, setHasAnimated] = useState(false);
 
+  const durationClass = {
+    fast: 'duration-150',
+    normal: 'duration-300',
+    slow: 'duration-500',
+  }[duration] || 'duration-300';
+
   useEffect(() => {
     if (trigger === 'mount' && !hasAnimated) {
       const timer = setTimeout(() => {
@@ -30,16 +36,11 @@ const AnimatedTransition: React.FC<AnimatedTransitionProps> = ({
       }, delay);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [trigger, delay, hasAnimated]);
 
-  const getAnimationClass = () => {
-    const durationClass = {
-      fast: 'duration-150',
-      normal: 'duration-300',
-      slow: 'duration-500',
-    }[duration];
-
-    const animationMap = {
+  const getAnimationClass = (): string => {
+    const animationMap: Record<string, string> = {
       'fade': 'animate-fade-in',
       'fade-up': 'animate-fade-in-up',
       'fade-down': 'animate-fade-in-down',
@@ -53,7 +54,7 @@ const AnimatedTransition: React.FC<AnimatedTransitionProps> = ({
       'slide-right': 'animate-slide-in',
     };
 
-    return `${animationMap[animation]} ${durationClass}`;
+    return `${animationMap[animation] || 'animate-fade-in'} ${durationClass}`;
   };
 
   const getInitialStyles = (): React.CSSProperties => {

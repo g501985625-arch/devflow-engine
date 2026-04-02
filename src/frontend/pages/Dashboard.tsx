@@ -3,7 +3,7 @@ import ProjectCard from '../components/ProjectCard';
 import AgentAvatar from '../components/AgentAvatar';
 import ProgressBar from '../components/ProgressBar';
 import StatusBadge from '../components/StatusBadge';
-import AnimatedTransition, { StaggerContainer } from '../components/AnimatedTransition';
+import AnimatedTransition from '../components/AnimatedTransition';
 
 interface Project {
   id: string;

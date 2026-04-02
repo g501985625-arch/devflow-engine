@@ -1,5 +1,4 @@
 import React from 'react';
-import AgentAvatar from '../components/AgentAvatar';
 import StatusBadge from '../components/StatusBadge';
 import ProgressBar from '../components/ProgressBar';
 import AnimatedTransition from '../components/AnimatedTransition';

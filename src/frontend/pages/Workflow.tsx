@@ -1,24 +1,13 @@
 import React from 'react';
 import PhaseIndicator from '../components/PhaseIndicator';
 
-interface Task {
+interface Phase {
   id: string;
   name: string;
-  status: 'completed' | 'in_progress' | 'pending' | 'blocked';
-  dependencies: string[];
+  status: 'pending' | 'completed' | 'current';
 }
 
-const mockTasks: Task[] = [
-  { id: 't1', name: '需求分析', status: 'completed', dependencies: [] },
-  { id: 't2', name: '架构设计', status: 'completed', dependencies: ['t1'] },
-  { id: 't3', name: 'UI 设计', status: 'in_progress', dependencies: ['t2'] },
-  { id: 't4', name: '前端开发', status: 'pending', dependencies: ['t3'] },
-  { id: 't5', name: '后端开发', status: 'pending', dependencies: ['t2'] },
-  { id: 't6', name: 'API 集成', status: 'pending', dependencies: ['t4', 't5'] },
-  { id: 't7', name: '功能测试', status: 'pending', dependencies: ['t6'] },
-];
-
-const phases = [
+const phases: Phase[] = [
   { id: 'requirement', name: '需求', status: 'completed' },
   { id: 'architecture', name: '架构', status: 'completed' },
   { id: 'ui_design', name: 'UI设计', status: 'current' },

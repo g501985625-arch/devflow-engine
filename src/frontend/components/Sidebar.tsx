@@ -3,7 +3,7 @@ import React from 'react';
 interface SidebarProps {
   currentPage: string;
   onNavigate: (page: string) => void;
-  isDark: boolean;
+  isDark?: boolean;
 }
 
 interface NavItem {
@@ -13,7 +13,7 @@ interface NavItem {
   badge?: number;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate, isDark }) => {
+const Sidebar: React.FC<SidebarProps> = ({ currentPage, onNavigate, isDark: _isDark }) => {
   const navItems: NavItem[] = [
     {
       id: 'dashboard',
