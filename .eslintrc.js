@@ -36,5 +36,15 @@ module.exports = {
     'quotes': ['error', 'single', { avoidEscape: true }]
   },
   
+  overrides: [
+    {
+      // CLI 命令文件允许 console 输出
+      files: ['src/cli/**/*.ts'],
+      rules: {
+        'no-console': 'off'
+      }
+    }
+  ],
+  
   ignorePatterns: ['dist', 'node_modules', '*.js']
 };
