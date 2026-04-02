@@ -18,9 +18,9 @@ function createWindow() {
     },
   });
 
-  // 开发模式：连接 Vite dev server
-  // 生产模式：加载静态文件
-  const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
+  // 生产模式：直接加载打包后的静态文件
+  // 开发模式通过 NODE_ENV=development 环境变量控制
+  const isDev = process.env.NODE_ENV === 'development';
   
   if (isDev) {
     // 开发模式：连接本地 Vite server
@@ -28,7 +28,8 @@ function createWindow() {
     mainWindow.webContents.openDevTools();
   } else {
     // 生产模式：加载打包后的静态文件
-    mainWindow.loadFile(path.join(__dirname, '..', 'dist', 'web-static', 'index.html'));
+    const staticPath = path.join(__dirname, '..', 'dist', 'web-static', 'index.html');
+    mainWindow.loadFile(staticPath);
   }
 
   mainWindow.on('closed', () => {
