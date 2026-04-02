@@ -1,11 +1,10 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
-const { spawn } = require('child_process');
 
 let mainWindow;
-let serverProcess;
+let serverStarted = false;
 
-function createWindow() {
+async function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
@@ -37,27 +36,32 @@ function createWindow() {
   });
 }
 
-function startServer() {
-  // 生产环境启动后端 Server
-  const serverPath = path.join(__dirname, '..', 'dist', 'server', 'index.js');
-  serverProcess = spawn('node', [serverPath], {
-    cwd: path.join(__dirname, '..'),
-    stdio: 'inherit',
-    env: { ...process.env, PORT: '3000' }
-  });
-}
-
-function stopServer() {
-  if (serverProcess) {
-    serverProcess.kill();
-    serverProcess = null;
+async function startServer() {
+  if (serverStarted) return;
+  
+  try {
+    // 动态导入服务器模块
+    const serverPath = path.join(__dirname, '..', 'dist', 'server', 'index.js');
+    const { createServer } = require(serverPath);
+    
+    await createServer({
+      port: 3000,
+      host: 'localhost'
+    });
+    
+    serverStarted = true;
+    console.log('DevFlow Server started on port 3000');
+  } catch (err) {
+    console.error('Failed to start server:', err);
   }
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(async () => {
+  await startServer();
+  await createWindow();
+});
 
 app.on('window-all-closed', () => {
-  stopServer();
   if (process.platform !== 'darwin') {
     app.quit();
   }
@@ -67,8 +71,4 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
   }
-});
-
-app.on('before-quit', () => {
-  stopServer();
 });

@@ -6,6 +6,16 @@ import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import type { DevFlowEngine } from '../../core/Engine.js';
 import type { ApiResponse } from '../types.js';
 
+// 默认工作流阶段定义
+const DEFAULT_PHASES = [
+  { id: 'requirement', name: '需求阶段', status: 'pending' },
+  { id: 'architecture', name: '架构阶段', status: 'pending' },
+  { id: 'ui_design', name: 'UI设计阶段', status: 'pending' },
+  { id: 'development', name: '开发阶段', status: 'pending' },
+  { id: 'integration', name: '整合阶段', status: 'pending' },
+  { id: 'extension', name: '扩展阶段', status: 'pending' },
+];
+
 export async function registerWorkflowRoutes(
   fastify: FastifyInstance,
   engine: DevFlowEngine
@@ -17,6 +27,19 @@ export async function registerWorkflowRoutes(
   function errorResponse(error: string, errorCode?: string): ApiResponse {
     return { success: false, error, errorCode };
   }
+
+  /**
+   * GET /api/workflow/phases - 获取工作流阶段定义
+   */
+  fastify.get(
+    '/api/workflow/phases',
+    async (_request: FastifyRequest, _reply: FastifyReply) => {
+      return successResponse({
+        phases: DEFAULT_PHASES,
+        total: DEFAULT_PHASES.length,
+      });
+    }
+  );
 
   /**
    * GET /api/workflow/:projectId - 工作流状态
