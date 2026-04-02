@@ -47,13 +47,30 @@ export class ProjectManager {
     const projectPath = path.join(this.projectsDir, projectId);
     await this.fs.createDir(projectPath);
     
-    // 创建子目录
-    await this.fs.createDir(path.join(projectPath, 'src'));
-    await this.fs.createDir(path.join(projectPath, 'docs'));
-    await this.fs.createDir(path.join(projectPath, 'memory'));
-    await this.fs.createDir(path.join(projectPath, 'progress'));
-    await this.fs.createDir(path.join(projectPath, 'templates'));
-    await this.fs.createDir(path.join(projectPath, 'tests'));
+    // 创建标准子目录结构（强制规范：所有产物必须在此目录）
+    await this.fs.createDir(path.join(projectPath, 'src'));           // 源代码
+    await this.fs.createDir(path.join(projectPath, 'src', 'frontend')); // 前端代码（美术产出）
+    await this.fs.createDir(path.join(projectPath, 'src', 'backend'));  // 后端代码
+    await this.fs.createDir(path.join(projectPath, 'src', 'shared'));   // 共享代码
+    await this.fs.createDir(path.join(projectPath, 'docs'));           // 项目文档
+    await this.fs.createDir(path.join(projectPath, 'docs', 'design')); // 设计文档（美术产出）
+    await this.fs.createDir(path.join(projectPath, 'docs', 'architecture')); // 架构文档
+    await this.fs.createDir(path.join(projectPath, 'assets'));         // 资源文件（美术产出）
+    await this.fs.createDir(path.join(projectPath, 'assets', 'images')); // 图片资源
+    await this.fs.createDir(path.join(projectPath, 'assets', 'icons'));  // 图标资源
+    await this.fs.createDir(path.join(projectPath, 'dist'));           // 构建产物
+    await this.fs.createDir(path.join(projectPath, 'dist', 'web'));    // Web 构建产物
+    await this.fs.createDir(path.join(projectPath, 'dist', 'desktop')); // 桌面应用构建产物
+    await this.fs.createDir(path.join(projectPath, 'dist', 'mobile'));  // 移动应用构建产物
+    await this.fs.createDir(path.join(projectPath, 'memory'));         // Agent 记忆数据
+    await this.fs.createDir(path.join(projectPath, 'progress'));       // 开发进度
+    await this.fs.createDir(path.join(projectPath, 'tests'));          // 测试代码
+    await this.fs.createDir(path.join(projectPath, '.agent-workspace')); // 子代理工作区（强制统一）
+    
+    // 创建代理工作区子目录（按角色划分）
+    for (const role of DEFAULTS.roles) {
+      await this.fs.createDir(path.join(projectPath, '.agent-workspace', role));
+    }
     
     // 创建配置
     const config: ProjectConfig = {
@@ -67,6 +84,7 @@ export class ProjectManager {
         phases: [
           { id: 'requirement', name: '需求阶段', status: 'pending' },
           { id: 'architecture', name: '架构阶段', status: 'pending' },
+          { id: 'ui_design', name: 'UI设计阶段', status: 'pending' },
           { id: 'development', name: '开发阶段', status: 'pending' },
           { id: 'integration', name: '整合阶段', status: 'pending' },
           { id: 'extension', name: '扩展阶段', status: 'pending' },
@@ -80,6 +98,17 @@ export class ProjectManager {
         autoTest: true,
         requireCodeReview: true,
         requireVisualVerification: false,
+      },
+      // 工作区强制约束（所有子代理必须遵守）
+      workspaceConstraints: {
+        enforceProjectWorkspace: true,  // 强制使用项目工作区
+        disableAgentWorkspace: true,    // 禁止写入代理个人工作区
+        sourcePath: 'src',              // 源代码路径
+        distPath: 'dist',               // 构建产物路径（项目内）
+        packageOutputPath: '~/Desktop/<project-name>-Packages/', // 安装包输出路径（桌面）
+        docsPath: 'docs',               // 文档路径
+        assetsPath: 'assets',           // 资源文件路径
+        agentWorkspacePath: '.agent-workspace', // 子代理临时工作路径
       },
     };
     

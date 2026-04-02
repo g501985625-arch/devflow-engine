@@ -1,0 +1,1015 @@
+/* DevFlow Engine - Global Styles
+ * Inspired by Linear, Vercel, Raycast, Notion, GitHub Projects, Discord
+ * Design: Minimalist, Glassmorphism, Gradient, Smooth animations
+ */
+
+@import "tailwindcss";
+
+/* ============================================
+   CSS Custom Properties (Theme Variables)
+   ============================================ */
+:root {
+  /* Primary Colors - Blue to Cyan Gradient */
+  --primary-blue: #2563eb;
+  --primary-cyan: #06b6d4;
+  --primary-gradient: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  
+  /* Background Colors */
+  --bg-light: #f8fafc;
+  --bg-light-secondary: #f1f5f9;
+  --bg-dark: #0f172a;
+  --bg-dark-secondary: #1e293b;
+  
+  /* Card Colors */
+  --card-light: #ffffff;
+  --card-dark: #1e293b;
+  --card-dark-hover: #334155;
+  
+  /* Border Colors */
+  --border-light: #e2e8f0;
+  --border-dark: #334155;
+  
+  /* Agent Role Colors */
+  --agent-manager: #8b5cf6;       /* 总管 - Purple */
+  --agent-architect: #2563eb;     /* 架构师 - Blue */
+  --agent-lead-dev: #10b981;      /* 主程序 - Green */
+  --agent-developer: #06b6d4;     /* 开发员 - Cyan */
+  --agent-designer: #ec4899;      /* 美术 - Pink */
+  --agent-planner: #f97316;       /* 规划师 - Orange */
+  --agent-supervisor: #ef4444;    /* 主管 - Red */
+  
+  /* Status Colors */
+  --status-online: #22c55e;
+  --status-busy: #eab308;
+  --status-offline: #9ca3af;
+  
+  /* Phase Colors */
+  --phase-requirement: #8b5cf6;
+  --phase-architecture: #2563eb;
+  --phase-ui-design: #06b6d4;
+  --phase-development: #10b981;
+  --phase-integration: #f97316;
+  --phase-extension: #ef4444;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-glow-blue: 0 0 20px rgba(37, 99, 235, 0.4);
+  --shadow-glow-cyan: 0 0 20px rgba(6, 182, 212, 0.4);
+  
+  /* Animation Durations */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  
+  /* Glass Effect */
+  --glass-blur: 12px;
+  --glass-bg-light: rgba(255, 255, 255, 0.7);
+  --glass-bg-dark: rgba(30, 41, 59, 0.7);
+}
+
+/* ============================================
+   Dark Mode Support
+   ============================================ */
+.dark {
+  color-scheme: dark;
+  --bg-primary: var(--bg-dark);
+  --bg-secondary: var(--bg-dark-secondary);
+  --card-bg: var(--card-dark);
+  --border-color: var(--border-dark);
+}
+
+/* ============================================
+   Base Styles & Transitions
+   ============================================ */
+* {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: var(--duration-normal);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   Custom Scrollbar (Linear-style)
+   ============================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(71, 85, 105, 0.4);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(71, 85, 105, 0.6);
+}
+
+/* ============================================
+   Animation Keyframes
+   ============================================ */
+
+/* Fade Animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scale Animations */
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scale-in-bounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Slide Animations */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Pulse Animations */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(6, 182, 212, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(6, 182, 212, 0.8);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Progress Flow Animation */
+@keyframes progress-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes progress-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Spin Animation */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Float Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* Gradient Shift */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Ripple Animation */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   Animation Utility Classes
+   ============================================ */
+.animate-fade-in {
+  animation: fade-in var(--duration-normal) ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up var(--duration-normal) ease-out forwards;
+}
+
+.animate-fade-in-down {
+  animation: fade-in-down var(--duration-normal) ease-out forwards;
+}
+
+.animate-fade-in-left {
+  animation: fade-in-left var(--duration-normal) ease-out forwards;
+}
+
+.animate-fade-in-right {
+  animation: fade-in-right var(--duration-normal) ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scale-in var(--duration-normal) ease-out forwards;
+}
+
+.animate-scale-in-bounce {
+  animation: scale-in-bounce 400ms ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slide-up var(--duration-normal) ease-out forwards;
+}
+
+.animate-slide-down {
+  animation: slide-down var(--duration-normal) ease-out forwards;
+}
+
+.animate-slide-in {
+  animation: slide-in-right var(--duration-normal) ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 1.5s ease-in-out infinite;
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+.animate-progress-flow {
+  background: linear-gradient(90deg, #2563eb, #06b6d4, #2563eb);
+  background-size: 200% 100%;
+  animation: progress-flow 2s linear infinite;
+}
+
+.animate-progress-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: progress-shimmer 1.5s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Staggered Animation Delays */
+.animation-delay-100 { animation-delay: 100ms; }
+.animation-delay-200 { animation-delay: 200ms; }
+.animation-delay-300 { animation-delay: 300ms; }
+.animation-delay-400 { animation-delay: 400ms; }
+.animation-delay-500 { animation-delay: 500ms; }
+
+/* ============================================
+   Gradient Utilities
+   ============================================ */
+.gradient-primary {
+  background: var(--primary-gradient);
+}
+
+.gradient-primary-hover:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #0891b2 100%);
+}
+
+.gradient-dark {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+.gradient-light {
+  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+}
+
+.gradient-text {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Phase Gradients */
+.gradient-phase-requirement {
+  background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+}
+
+.gradient-phase-architecture {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+}
+
+.gradient-phase-ui-design {
+  background: linear-gradient(135deg, #06b6d4, #22d3ee);
+}
+
+.gradient-phase-development {
+  background: linear-gradient(135deg, #10b981, #34d399);
+}
+
+.gradient-phase-integration {
+  background: linear-gradient(135deg, #f97316, #fb923c);
+}
+
+.gradient-phase-extension {
+  background: linear-gradient(135deg, #ef4444, #f87171);
+}
+
+/* Agent Role Gradients */
+.gradient-agent-manager {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.gradient-agent-architect {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+.gradient-agent-lead-dev {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.gradient-agent-developer {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+}
+
+.gradient-agent-designer {
+  background: linear-gradient(135deg, #ec4899, #db2777);
+}
+
+.gradient-agent-planner {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+}
+
+.gradient-agent-supervisor {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+/* ============================================
+   Glass Morphism (Raycast-style)
+   ============================================ */
+.glass {
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+.glass-light {
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  background: var(--glass-bg-light);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-dark {
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  background: var(--glass-bg-dark);
+  border: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.glass-card {
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.5);
+  box-shadow: var(--shadow-lg);
+}
+
+.dark .glass-card {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+/* ============================================
+   Card Styles (Linear/Vercel-style)
+   ============================================ */
+.card {
+  background: var(--card-light);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.dark .card {
+  background: var(--card-dark);
+  border: 1px solid var(--border-dark);
+}
+
+.card-hover {
+  transition: all var(--duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.dark .card-hover:hover {
+  background: var(--card-dark-hover);
+}
+
+.card-interactive {
+  cursor: pointer;
+  transition: all var(--duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-interactive:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-xl);
+}
+
+.card-interactive:active {
+  transform: translateY(-2px) scale(1.01);
+}
+
+/* ============================================
+   Status Indicators (Discord-style)
+   ============================================ */
+.status-online {
+  width: 10px;
+  height: 10px;
+  background: var(--status-online);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+}
+
+.status-online-pulse {
+  width: 10px;
+  height: 10px;
+  background: var(--status-online);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+  animation: pulse-ring 2s ease-in-out infinite;
+}
+
+.status-busy {
+  width: 10px;
+  height: 10px;
+  background: var(--status-busy);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(234, 179, 8, 0.6);
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+.status-offline {
+  width: 10px;
+  height: 10px;
+  background: var(--status-offline);
+  border-radius: 50%;
+}
+
+/* Status Ring Indicator */
+.status-ring {
+  position: relative;
+}
+
+.status-ring::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.dark .status-ring::after {
+  border-color: var(--bg-dark);
+}
+
+/* ============================================
+   Phase Connector Lines
+   ============================================ */
+.phase-connector {
+  height: 4px;
+  background: var(--primary-gradient);
+  border-radius: 2px;
+}
+
+.phase-connector-pending {
+  height: 4px;
+  background: var(--border-light);
+  border-radius: 2px;
+}
+
+.dark .phase-connector-pending {
+  background: var(--border-dark);
+}
+
+.phase-connector-animated {
+  height: 4px;
+  background: linear-gradient(90deg, #2563eb, #06b6d4, #2563eb);
+  background-size: 200% 100%;
+  animation: progress-flow 2s linear infinite;
+  border-radius: 2px;
+}
+
+/* ============================================
+   Progress Bar Styles
+   ============================================ */
+.progress-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--bg-light-secondary);
+  overflow: hidden;
+}
+
+.dark .progress-bar {
+  background: var(--bg-dark-secondary);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--primary-gradient);
+  transition: width var(--duration-slow) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-bar-fill-animated {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #2563eb, #06b6d4, #2563eb);
+  background-size: 200% 100%;
+  animation: progress-flow 2s linear infinite;
+  transition: width var(--duration-slow) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-bar-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: progress-shimmer 1.5s ease-in-out infinite;
+}
+
+/* ============================================
+   File Tree Styles (Notion-style)
+   ============================================ */
+.file-tree {
+  font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+}
+
+.file-tree-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color var(--duration-fast);
+}
+
+.file-tree-item:hover {
+  background: var(--bg-light-secondary);
+}
+
+.dark .file-tree-item:hover {
+  background: var(--bg-dark-secondary);
+}
+
+.file-tree-item-selected {
+  background: rgba(37, 99, 235, 0.1);
+}
+
+.dark .file-tree-item-selected {
+  background: rgba(37, 99, 235, 0.2);
+}
+
+.file-tree-folder-icon {
+  color: var(--primary-blue);
+}
+
+.file-tree-file-icon {
+  color: var(--status-offline);
+}
+
+/* ============================================
+   Button Styles
+   ============================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.btn-primary {
+  background: var(--primary-gradient);
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #0891b2 100%);
+  box-shadow: var(--shadow-glow-blue);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--primary-blue);
+  border: 1px solid var(--primary-blue);
+}
+
+.btn-secondary:hover {
+  background: rgba(37, 99, 235, 0.1);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: inherit;
+  border: none;
+}
+
+.btn-ghost:hover {
+  background: var(--bg-light-secondary);
+}
+
+.dark .btn-ghost:hover {
+  background: var(--bg-dark-secondary);
+}
+
+/* ============================================
+   Input Styles
+   ============================================ */
+.input {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 14px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  background: var(--card-light);
+  transition: all var(--duration-fast);
+}
+
+.dark .input {
+  border-color: var(--border-dark);
+  background: var(--card-dark);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* ============================================
+   Badge Styles (GitHub Projects-style)
+   ============================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 9999px;
+}
+
+.badge-primary {
+  background: rgba(37, 99, 235, 0.15);
+  color: var(--primary-blue);
+}
+
+.dark .badge-primary {
+  background: rgba(37, 99, 235, 0.25);
+  color: #60a5fa;
+}
+
+.badge-success {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--status-online);
+}
+
+.dark .badge-success {
+  background: rgba(34, 197, 94, 0.25);
+  color: #4ade80;
+}
+
+.badge-warning {
+  background: rgba(234, 179, 8, 0.15);
+  color: var(--status-busy);
+}
+
+.dark .badge-warning {
+  background: rgba(234, 179, 8, 0.25);
+  color: #facc15;
+}
+
+.badge-danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--agent-supervisor);
+}
+
+.dark .badge-danger {
+  background: rgba(239, 68, 68, 0.25);
+  color: #f87171;
+}
+
+/* ============================================
+   Focus Ring
+   ============================================ */
+.focus-ring {
+  outline: none;
+}
+
+.focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary-blue);
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--primary-blue);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   Skeleton Loading
+   ============================================ */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-light-secondary) 25%,
+    var(--bg-light) 50%,
+    var(--bg-light-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: progress-shimmer 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+.dark .skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-dark-secondary) 25%,
+    var(--bg-dark) 50%,
+    var(--bg-dark-secondary) 75%
+  );
+  background-size: 200% 100%;
+}
+
+/* ============================================
+   Divider
+   ============================================ */
+.divider {
+  height: 1px;
+  background: var(--border-light);
+}
+
+.dark .divider {
+  background: var(--border-dark);
+}
+
+.divider-gradient {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary-blue), transparent);
+}
+
+/* ============================================
+   Tooltip
+   ============================================ */
+.tooltip {
+  position: relative;
+}
+
+.tooltip::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 10px;
+  font-size: 12px;
+  background: var(--bg-dark);
+  color: white;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--duration-fast);
+  z-index: 100;
+}
+
+.tooltip:hover::before {
+  opacity: 1;
+  visibility: visible;
+  bottom: calc(100% + 4px);
+}
+
+/* ============================================
+   Responsive Utilities
+   ============================================ */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .show-mobile-only {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}

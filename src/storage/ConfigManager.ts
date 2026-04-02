@@ -9,6 +9,7 @@
 import * as yaml from 'yaml';
 import { FileSystem } from './FileSystem.js';
 import { PathUtils } from './PathUtils.js';
+import type { ProjectConfig } from '../project/types.js';
 
 /**
  * 配置管理器
@@ -141,5 +142,21 @@ export class ConfigManager {
         temperature: 0.7,
       },
     };
+  }
+  
+  /**
+   * 获取项目配置（从 project.json）
+   * 用于工作区验证器获取约束配置
+   */
+  async getProjectConfig(): Promise<ProjectConfig | null> {
+    const projectJsonPath = this.pathUtils.getProjectPath('project.json');
+    const exists = await this.fs.exists(projectJsonPath);
+    
+    if (!exists) {
+      return null;
+    }
+    
+    const content = await this.fs.readFile(projectJsonPath);
+    return JSON.parse(content) as ProjectConfig;
   }
 }

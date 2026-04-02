@@ -11,25 +11,24 @@ function createWindow() {
     height: 800,
     minWidth: 800,
     minHeight: 600,
-    title: 'DevFlow Engine',
-    icon: path.join(__dirname, 'assets', 'icon.png'),
+    title: 'DevFlow Engine Dashboard',
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
     },
   });
 
-  // 加载 Dashboard
-  const isDev = process.env.NODE_ENV === 'development';
+  // 开发模式：连接 Vite dev server
+  // 生产模式：加载静态文件
+  const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
   
   if (isDev) {
+    // 开发模式：连接本地 Vite server
     mainWindow.loadURL('http://localhost:5173');
+    mainWindow.webContents.openDevTools();
   } else {
-    // 生产环境：先启动 Server，然后加载静态文件
-    startServer();
-    mainWindow.loadFile(path.join(__dirname, '..', 'web-static', 'index.html'));
-    // 或连接到本地 Server
-    // mainWindow.loadURL('http://localhost:3000');
+    // 生产模式：加载打包后的静态文件
+    mainWindow.loadFile(path.join(__dirname, '..', 'dist', 'web-static', 'index.html'));
   }
 
   mainWindow.on('closed', () => {
@@ -38,10 +37,12 @@ function createWindow() {
 }
 
 function startServer() {
-  const serverPath = path.join(__dirname, '..', 'server', 'index.js');
+  // 生产环境启动后端 Server
+  const serverPath = path.join(__dirname, '..', 'dist', 'server', 'index.js');
   serverProcess = spawn('node', [serverPath], {
     cwd: path.join(__dirname, '..'),
     stdio: 'inherit',
+    env: { ...process.env, PORT: '3000' }
   });
 }
 

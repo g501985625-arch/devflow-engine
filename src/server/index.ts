@@ -23,12 +23,6 @@ export async function createServer(config: ServerConfig): Promise<FastifyInstanc
   const fastify = Fastify({
     logger: {
       level: 'info',
-      transport: {
-        target: 'pino-pretty',
-        options: {
-          colorize: true,
-        },
-      },
     },
   });
 

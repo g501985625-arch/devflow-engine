@@ -26,6 +26,8 @@ export interface ProjectConfig {
   team: TeamConfig;
   /** 验证配置 */
   verification: VerificationConfig;
+  /** 工作区约束配置（强制规范） */
+  workspaceConstraints: WorkspaceConstraints;
 }
 
 /**
@@ -113,4 +115,26 @@ export interface VerificationConfig {
   requireCodeReview: boolean;
   /** 需要视觉验证 */
   requireVisualVerification: boolean;
+}
+
+/**
+ * 工作区约束配置（强制规范）
+ */
+export interface WorkspaceConstraints {
+  /** 强制使用项目工作区 */
+  enforceProjectWorkspace: boolean;
+  /** 禁止写入代理个人工作区 */
+  disableAgentWorkspace: boolean;
+  /** 源代码存放路径 */
+  sourcePath: string;
+  /** 构建产物存放路径（项目内） */
+  distPath: string;
+  /** 安装包输出路径（桌面） */
+  packageOutputPath: string;
+  /** 文档存放路径 */
+  docsPath: string;
+  /** 资源文件存放路径 */
+  assetsPath: string;
+  /** 子代理临时工作路径 */
+  agentWorkspacePath: string;
 }

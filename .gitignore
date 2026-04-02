@@ -42,3 +42,6 @@ coverage/
 projects/
 *.db
 *.sqlite
+
+# Release packages (built artifacts)
+release/

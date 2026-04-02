@@ -12,6 +12,7 @@ import { ConfigManager } from './ConfigManager.js';
 import { FileIndexer } from './FileIndexer.js';
 import { PathUtils } from './PathUtils.js';
 import { Watcher, FileChangeEvent } from './Watcher.js';
+import { WorkspaceValidator, createWorkspaceValidator } from '../core/WorkspaceValidator.js';
 import type { FileIndex, FileInfo, FileSearchQuery } from './types.js';
 
 /**
@@ -37,6 +38,7 @@ export class StorageLayer {
   
   private index: FileIndex | null = null;
   private initialized = false;
+  private validator: WorkspaceValidator | null = null;
   
   constructor(projectPath: string) {
     this.fs = new FileSystem();
@@ -53,6 +55,15 @@ export class StorageLayer {
     // 加载配置
     await this.config.load();
     
+    // 创建工作区验证器（强制执行规范）
+    const projectConfig = await this.config.getProjectConfig();
+    if (projectConfig?.workspaceConstraints?.enforceProjectWorkspace) {
+      this.validator = createWorkspaceValidator(
+        this.paths.getProjectPath(),
+        projectConfig
+      );
+    }
+    
     // 扫描文件索引
     this.index = await this.indexer.scanProject(this.paths.getProjectPath());
     
@@ -60,7 +71,56 @@ export class StorageLayer {
     await this.fs.createDir(this.paths.getMemoryPath());
     await this.fs.createDir(this.paths.getProgressPath());
     
+    // 创建桌面安装包输出目录
+    if (this.validator) {
+      await this.fs.createDir(this.validator.getDesktopPackagePath());
+    }
+    
     this.initialized = true;
+  }
+  
+  /**
+   * 获取工作区验证器
+   */
+  getValidator(): WorkspaceValidator | null {
+    return this.validator;
+  }
+  
+  /**
+   * 验证写入路径（强制执行工作区规范）
+   * @param targetPath 目标路径
+   * @param fileType 文件类型
+   * @param role 当前角色
+   */
+  validateWritePath(
+    targetPath: string,
+    fileType: 'source' | 'docs' | 'assets' | 'dist' | 'package' | 'temp',
+    role: string
+  ): void {
+    if (!this.validator) {
+      return; // 未启用强制约束，跳过验证
+    }
+    
+    const result = this.validator.validateWritePath(targetPath, fileType, role);
+    
+    if (!result.valid) {
+      throw new Error(
+        `[工作区规范违规] ${result.errorMessage}\n建议路径: ${result.suggestedPath}`
+      );
+    }
+  }
+  
+  /**
+   * 安全写入文件（自动验证路径）
+   */
+  async safeWriteFile(
+    filePath: string,
+    content: string,
+    fileType: 'source' | 'docs' | 'assets' | 'dist' | 'package' | 'temp',
+    role: string
+  ): Promise<void> {
+    this.validateWritePath(filePath, fileType, role);
+    await this.fs.writeFile(filePath, content);
   }
   
   /**
