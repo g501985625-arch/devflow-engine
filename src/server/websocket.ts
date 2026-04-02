@@ -15,7 +15,7 @@ const clients: Set<WebSocket> = new Set();
  * 设置 WebSocket
  */
 export function setupWebSocket(fastify: FastifyInstance, engine: DevFlowEngine): void {
-  fastify.register(async (fastifyInstance) => {
+  void fastify.register(async (fastifyInstance) => {
     fastifyInstance.get('/ws', { websocket: true }, (connection) => {
       const socket = connection.socket;
 

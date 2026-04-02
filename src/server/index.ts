@@ -109,7 +109,7 @@ export async function createServer(config: ServerConfig): Promise<FastifyInstanc
 
     const errorCode = knownErrors.find(code => error.message.includes(code));
 
-    reply.status(500).send(errorResponse(error.message, errorCode));
+    void reply.status(500).send(errorResponse(error.message, errorCode));
   });
 
   // 启动服务器

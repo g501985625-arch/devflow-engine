@@ -27,7 +27,7 @@ export async function registerControlRoutes(
    */
   fastify.post(
     '/api/control/start',
-    async (request: FastifyRequest<{ Body: { projectId: string } }>, _reply: FastifyReply) => {
+    async (request: FastifyRequest<{ Body: { projectId: string } }>, _reply: FastifyReply): Promise<ApiResponse<{ started: boolean; projectId: string; timestamp: string } | ApiResponse>> => {
       if (!engine.isInitialized()) {
         return errorResponse('Engine not initialized', 'ENGINE_NOT_INITIALIZED');
       }
@@ -39,8 +39,8 @@ export async function registerControlRoutes(
         return errorResponse('AutomationEngine not initialized', 'ENGINE_NOT_INITIALIZED');
       }
 
-      // 异步启动自动化循环
-      (async () => {
+      // 异步启动自动化循环（故意不等待）
+      void (async () => {
         try {
           for await (const event of automationEngine.run(projectId)) {
             broadcastAutomationEvent(event);
@@ -85,7 +85,7 @@ export async function registerControlRoutes(
       return errorResponse('Engine not initialized', 'ENGINE_NOT_INITIALIZED');
     }
 
-    engine.pauseAutomation();
+    await engine.pauseAutomation();
 
     broadcastAutomationEvent({ type: 'paused' });
 
@@ -103,7 +103,7 @@ export async function registerControlRoutes(
       return errorResponse('Engine not initialized', 'ENGINE_NOT_INITIALIZED');
     }
 
-    engine.resumeAutomation();
+    await engine.resumeAutomation();
 
     return successResponse({
       resumed: true,

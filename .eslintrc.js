@@ -31,6 +31,9 @@ module.exports = {
     'prefer-const': 'error',
     'no-var': 'error',
     
+    // 异步处理
+    '@typescript-eslint/no-floating-promises': 'error',
+    
     // 格式化
     'semi': ['error', 'always'],
     'quotes': ['error', 'single', { avoidEscape: true }]
