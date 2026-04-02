@@ -1,8 +1,26 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
+const fs = require('fs');
 
 let mainWindow;
 let serverStarted = false;
+
+// 使用 /tmp 作为日志位置，确保能写入
+const logPath = '/tmp/devflow-electron.log';
+
+function log(message) {
+  const timestamp = new Date().toISOString();
+  const logMessage = `[${timestamp}] ${message}\n`;
+  console.log(logMessage);
+  try {
+    fs.appendFileSync(logPath, logMessage);
+  } catch (e) {
+    console.error('Failed to write log:', e);
+  }
+}
+
+// 立即写入日志，测试脚本是否执行
+log('=== ELECTRON MAIN.JS LOADED ===');
 
 async function createWindow() {
   mainWindow = new BrowserWindow({
@@ -17,18 +35,26 @@ async function createWindow() {
     },
   });
 
-  // 生产模式：直接加载打包后的静态文件
-  // 开发模式通过 NODE_ENV=development 环境变量控制
   const isDev = process.env.NODE_ENV === 'development';
   
   if (isDev) {
-    // 开发模式：连接本地 Vite server
     mainWindow.loadURL('http://localhost:5173');
     mainWindow.webContents.openDevTools();
   } else {
-    // 生产模式：加载打包后的静态文件
-    const staticPath = path.join(__dirname, '..', 'dist', 'web-static', 'index.html');
-    mainWindow.loadFile(staticPath);
+    const staticPath = path.join(process.resourcesPath, 'web-static', 'index.html');
+    log(`Loading static file from: ${staticPath}`);
+    
+    if (fs.existsSync(staticPath)) {
+      mainWindow.loadFile(staticPath);
+      log('Static file loaded successfully');
+    } else {
+      log(`ERROR: Static file not found at ${staticPath}`);
+      const backupPath = path.join(app.getAppPath(), 'dist', 'web-static', 'index.html');
+      log(`Trying backup path: ${backupPath}`);
+      if (fs.existsSync(backupPath)) {
+        mainWindow.loadFile(backupPath);
+      }
+    }
   }
 
   mainWindow.on('closed', () => {
@@ -40,9 +66,15 @@ async function startServer() {
   if (serverStarted) return;
   
   try {
-    // 动态导入服务器模块
-    const serverPath = path.join(__dirname, '..', 'dist', 'server', 'index.js');
+    log('Starting server...');
+    
+    const appPath = app.getAppPath();
+    const serverPath = path.join(appPath, 'dist', 'server', 'index.js');
+    
+    log(`Server path: ${serverPath}`);
+    
     const { createServer } = require(serverPath);
+    log('Server module loaded successfully');
     
     await createServer({
       port: 3000,
@@ -50,13 +82,21 @@ async function startServer() {
     });
     
     serverStarted = true;
-    console.log('DevFlow Server started on port 3000');
+    log('DevFlow Server started on port 3000');
   } catch (err) {
-    console.error('Failed to start server:', err);
+    log(`Failed to start server: ${err.message}`);
+    log(`Stack: ${err.stack}`);
   }
 }
 
 app.whenReady().then(async () => {
+  // 在 app ready 后初始化日志路径
+  logPath = path.join(app.getPath('userData'), 'devflow.log');
+  log('App ready');
+  log(`__dirname: ${__dirname}`);
+  log(`app.getAppPath(): ${app.getAppPath()}`);
+  log(`process.resourcesPath: ${process.resourcesPath}`);
+  
   await startServer();
   await createWindow();
 });
